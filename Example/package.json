@@ -7,16 +7,17 @@
     "test": "jest"
   },
   "dependencies": {
-    "prop-types": "^15.5.10",
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.46.2",
-    "react-native-user-inactivity": "../"
+    "react": "16.0.0",
+    "react-native": "0.51.0",
+    "react-native-user-inactivity": "^0.0.1-beta.1"
   },
   "devDependencies": {
-    "babel-jest": "20.0.3",
-    "babel-preset-react-native": "2.1.0",
-    "jest": "20.0.4",
-    "react-test-renderer": "16.0.0-alpha.12"
+    "babel-jest": "22.0.4",
+    "babel-preset-react-native": "4.0.0",
+    "flow": "^0.2.3",
+    "flow-bin": "^0.57.3",
+    "jest": "22.0.4",
+    "react-test-renderer": "16.0.0"
   },
   "jest": {
     "preset": "react-native"

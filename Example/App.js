@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   Text,
   Button,
@@ -16,10 +16,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends Component {
-
+export default class App extends PureComponent {
   state = {
-
+    timeWentInactive: null,
   };
 
   onInactivity = (timeWentInactive) => {

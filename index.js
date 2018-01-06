@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export default class UserInactivity extends Component {
+export default class UserInactivity extends PureComponent {
   static propTypes = {
     timeForInactivity: PropTypes.number,
     checkInterval: PropTypes.number,

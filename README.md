@@ -67,8 +67,5 @@ The time is expressed in milliseconds (*ms*).
 | **style**             | style    | The style of the wrapper                    | no       | { flex: 1 }   |
 | **children**          | React    | Nested react nodes to wrap                  | yes      | -             |
 
-## Issues
-It seems that onPress events aren't captured by this library's PanResponder yet.
-
 ## Contributing
 Of course PRs are welcome!

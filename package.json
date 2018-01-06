@@ -1,15 +1,23 @@
 {
   "name": "react-native-user-inactivity",
-  "version": "1.0.0",
+  "version": "0.0.1-beta.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "index.js",
+    "LICENSE",
+    "README.md"    
+  ],
   "keywords": [],
-  "author": "Alberto Schiabel <alberto.schiabel@gmail.com> (https://github.com/jkomyno)",
+  "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.6.0"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.62.0"
   }
 }

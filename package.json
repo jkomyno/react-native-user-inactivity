@@ -1,7 +1,7 @@
 {
   "name": "react-native-user-inactivity",
-  "version": "0.0.1-beta.1",
-  "description": "",
+  "version": "0.1.0-next",
+  "description": "React Native component that notifies if the user is active or not",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,15 +9,19 @@
   "files": [
     "index.js",
     "LICENSE",
-    "README.md"    
+    "README.md"
   ],
-  "keywords": [],
+  "keywords": [
+    "react",
+    "react-native",
+    "user",
+    "tracking",
+    "inactivity"
+  ],
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "prop-types": "^15.6.0"
+    "prop-types": "^15.6.2"
   },
-  "devDependencies": {
-    "flow-bin": "^0.62.0"
-  }
+  "devDependencies": {}
 }

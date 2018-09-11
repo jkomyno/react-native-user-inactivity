@@ -1,5 +1,6 @@
 # react-native-user-inactivity
-Simple component that alerts when the user is inactive (i.e. when the App surface hasn't been touched for X ms).
+
+React Native component that notifies if the user is active or not (i.e. when the app surface hasn't been touched for more than a certain amount of ms).
 
 ## Installation
 - with npm:
@@ -23,30 +24,30 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import UserInactivity from 'react-native-user-inactivity';
 
-export default class App extends Component {
-
+export default class App extends PureComponent {
   state = {
-    timeWentInactive: null,
+    active: true,
+    text: ''
   };
 
-  onInactivity = (timeWentInactive) => {
+  onAction = (active) => {
     this.setState({
-      timeWentInactive,
+      active,
     });
   }
 
   render() {
-    const { timeWentInactive } = this.state;
+    const { active } = this.state;
     return (
       <UserInactivity
-        timeForInactivity={5000}
-        checkInterval={1000}
-        onInactivity={this.onInactivity}
+        timeForInactivity={2000}
+        onAction={this.onAction}
       >
         <Text style={styles.paragraph}>
-          Put your app here
-          {timeWentInactive &&
-            ` (inactive at: ${timeWentInactive})`}
+          Put your app here: 
+          {
+            active ? 'Active' : 'Inactive'
+          }
         </Text>
       </UserInactivity>
     );
@@ -54,18 +55,17 @@ export default class App extends Component {
 }
 ```
 
-Also, please checkout the Example directory and run the application (`react-native run-android` or `react-native run-ios`).
+Also, please checkout the [example on Snack/Expo](https://snack.expo.io/Hk76ZiBdQ).
 
 ## Props
 The time is expressed in milliseconds (*ms*).
 
-| Prop                  | Type     | Explanation                                 | Required | Default Value |
-| --------------------- |--------- | ------------------------------------------- | -------- | ------------- |
-| **timeForInactivity** | number   | Inactivity time threshold                   | no       | 10000         |
-| **checkInterval**     | number   | How often should we check inactivity        | no       | 2000          |
-| **onInactivity**      | function | Callback for when the user becomes inactive | yes      | -             |
-| **style**             | style    | The style of the wrapper                    | no       | { flex: 1 }   |
-| **children**          | React    | Nested react nodes to wrap                  | yes      | -             |
+| Prop                  | Type               | Explanation                                 | Required | Default Value |
+| --------------------- |---------           | ------------------------------------------- | -------- | ------------- |
+| **timeForInactivity** | number             | Inactivity time threshold                   | no       | 10000         |
+| **onAction**          | (boolean) => void  | Callback triggered at every action, or lack of action after *timeForInactivity* ms      | yes      | -             |
+| **style**             | style              | The style of the wrapper                    | no       | { flex: 1 }   |
+| **children**          | React.ReactNode    | Nested react nodes to wrap                  | yes      | -             |
 
 ## Contributing
 Of course PRs are welcome!

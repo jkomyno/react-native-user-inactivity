@@ -4,97 +4,79 @@ import {
   View,
   PanResponder,
   ViewPropTypes,
-  StyleSheet,
 } from 'react-native';
 
-export default class UserInactivity extends PureComponent {
+class UserInactivity extends PureComponent {
   static propTypes = {
     timeForInactivity: PropTypes.number,
-    checkInterval: PropTypes.number,
     children: PropTypes.node.isRequired,
     style: ViewPropTypes.style,
-    onInactivity: PropTypes.func.isRequired,
+    onAction: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     timeForInactivity: 10000,
-    checkInterval: 2000,
     style: {
       flex: 1,
     },
   };
 
-  state = {};
-  lastInteraction = new Date();
-  panResponder = {};
+  state = {
+    active: true,
+  };
 
   componentWillMount() {
-    this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: this.onStartShouldSetPanResponder,
-      onMoveShouldSetPanResponder: this.onMoveShouldSetPanResponder,
-      onStartShouldSetPanResponderCapture: () => false,
-      onMoveShouldSetPanResponderCapture: () => false,
-      onPanResponderTerminationRequest: () => true,
-      onShouldBlockNativeResponder: () => false,
+    this.panResponder = PanResponder.create({ 
+      onMoveShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
+      onStartShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
+      onResponderTerminationRequest: this.handleInactivity
     });
-
-    this.maybeStartWatchingForInactivity();
+    this.handleInactivity();
   }
 
   componentWillUnmount() {
     clearInterval(this.inactivityTimer);
-    this.panResponder = null;
-    this.inactivityTimer = null;
   }
 
-  onStartShouldSetPanResponder = () => {
-    this.setIsActive();
-    return false;
-  }
-
-  onMoveShouldSetPanResponder = () => {
-    this.setIsActive();
-    return false;
-  }
-
-  maybeStartWatchingForInactivity = () => {
-    if (this.inactivityTimer) {
-      return;
-    }
-
-    const {
-      timeForInactivity,
-      checkInterval,
-    } = this.props;
-
-    this.inactivityTimer = setInterval(() => {
-      if (new Date() - this.lastInteraction >= timeForInactivity) {
-        this.setIsInactive();
-      }
-    }, checkInterval);
-  }
-
-  setIsActive = () => {
-    this.lastInteraction = new Date();
-    if (this.state.timeWentInactive) {
-      this.setState({
-        timeWentInactive: null,
-      }, () => {
-        this.props.onInactivity(null);
-      });
-    }
-    this.maybeStartWatchingForInactivity();
-  }
-
-  setIsInactive = () => {
-    const timeWentInactive = new Date();
+  /**
+   * This method is called whenever a touch is detected. If no touch is
+   * detected after `this.props.timeForInactivity` milliseconds, then
+   * `this.state.inactive` turns to true.
+   */
+  handleInactivity = () => {
+    clearTimeout(this.timeout);
     this.setState({
-      timeWentInactive,
+      active: true,
     }, () => {
-      this.props.onInactivity(timeWentInactive);
+      this.props.onAction(this.state.active); // true
     });
-    clearInterval(this.inactivityTimer);
-    this.inactivityTimer = null;
+    this.resetTimeout();
+  }
+
+  /**
+   * If more than `this.props.timeForInactivity` milliseconds have passed
+   * from the latest touch event, then the current state is set to `inactive`
+   * and the `this.props.onInactivity` callback is dispatched.
+   */
+  timeoutHandler = () => {
+    this.setState({
+      active: false,
+    }, () => {
+      this.props.onAction(this.state.active); // false
+    });
+  }
+
+  resetTimeout = () => {
+    this.timeout = setTimeout(this.timeoutHandler, this.props.timeForInactivity);
+  }
+
+  onShouldSetPanResponderCapture = () => {
+    this.handleInactivity();
+    /**
+     * In order not to steal any touches from the children components, this method
+     * must return false.
+     */
+    return false;
   }
 
   render() {

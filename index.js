@@ -6,7 +6,7 @@ import {
   ViewPropTypes,
 } from 'react-native';
 
-class UserInactivity extends PureComponent {
+export default class UserInactivity extends PureComponent {
   static propTypes = {
     timeForInactivity: PropTypes.number,
     children: PropTypes.node.isRequired,

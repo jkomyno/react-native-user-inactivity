@@ -55,7 +55,7 @@ export default class App extends PureComponent {
 }
 ```
 
-Also, please checkout the [example on Snack/Expo](https://snack.expo.io/Hk76ZiBdQ).
+Also, please checkout the [example on Snack/Expo](https://snack.expo.io/H1rlra2FX).
 
 ## Props
 The time is expressed in milliseconds (*ms*).

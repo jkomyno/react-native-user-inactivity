@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "./lib",
+    "target": "es6",
+    "module": "es2015",
+    "outDir": "./lib",
+    "baseUrl": ".",
+    "sourceMap": false,
+    "experimentalDecorators": true,
+    "jsx": "react-native",
+    "lib": ["es2015", "es2016"],
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "strict": true,
+    "noImplicitReturns": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

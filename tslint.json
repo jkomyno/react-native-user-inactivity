@@ -1,0 +1,17 @@
+{
+  "extends": ["tslint:recommended", "tslint-react"],
+  "rules": {
+    "member-access": false,
+    "no-console": false,
+    "interface-name": false,
+    "member-ordering": false,
+    "quotemark": [true, "single"]
+  },
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  }
+}

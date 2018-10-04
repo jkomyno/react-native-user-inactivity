@@ -1,6 +1,6 @@
 {
   "name": "react-native-user-inactivity",
-  "version": "0.1.1-next",
+  "version": "0.1.2-next",
   "description": "React Native component that notifies if the user is active or not",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

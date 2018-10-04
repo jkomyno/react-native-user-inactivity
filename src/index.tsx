@@ -1,41 +1,45 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import {
-  View,
   PanResponder,
-  ViewPropTypes,
+  PanResponderInstance,
+  StyleProp,
+  View,
+  ViewStyle,
 } from 'react-native';
 
-export default class UserInactivity extends PureComponent {
-  static propTypes = {
-    timeForInactivity: PropTypes.number,
-    children: PropTypes.node.isRequired,
-    style: ViewPropTypes.style,
-    onAction: PropTypes.func.isRequired,
-  };
+export interface UserInactivityProps {
+  timeForInactivity?: number;
+  children: React.ReactNode;
+  style: StyleProp<ViewStyle>;
+  onAction: (active: boolean) => void;
+}
 
+interface State {
+  active: boolean;
+}
+
+export default class UserInactivity extends React.PureComponent<UserInactivityProps, State> {
   static defaultProps = {
-    timeForInactivity: 10000,
     style: {
       flex: 1,
     },
+    timeForInactivity: 10000,
   };
 
   state = {
     active: true,
   };
 
+  private panResponder!: PanResponderInstance;
+  private timeout: number | undefined;
+
   componentWillMount() {
-    this.panResponder = PanResponder.create({ 
+    this.panResponder = PanResponder.create({
       onMoveShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
+      onPanResponderTerminationRequest: this.onShouldSetPanResponderCapture,
       onStartShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
-      onResponderTerminationRequest: this.handleInactivity
     });
     this.handleInactivity();
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.inactivityTimer);
   }
 
   /**
@@ -44,7 +48,7 @@ export default class UserInactivity extends PureComponent {
    * `this.state.inactive` turns to true.
    */
   handleInactivity = () => {
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeout!);
     this.setState({
       active: true,
     }, () => {

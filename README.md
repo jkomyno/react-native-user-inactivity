@@ -18,6 +18,12 @@ yarn add react-native-user-inactivity
 import UserInactivity from 'react-native-user-inactivity';
 ```
 
+## Typings
+
+Since the component itself is written in TypeScript, your editor's intellisense system should automagically detect
+the typings file (even if you're using plain JS!), thus providing a better developer experience.
+In fact, autocomplete capabilities and warning should come for free as you're typing the props to pass to the `UserInactivity` component.
+
 ## Basic Example
 ```js
 import React, { Component } from 'react';

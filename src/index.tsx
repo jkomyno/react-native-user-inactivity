@@ -33,6 +33,12 @@ export default class UserInactivity extends React.PureComponent<UserInactivityPr
   private panResponder!: PanResponderInstance;
   private timeout: number | undefined;
 
+  private clearTimer = () => {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+  }
+
   componentWillMount() {
     this.panResponder = PanResponder.create({
       onMoveShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
@@ -42,13 +48,17 @@ export default class UserInactivity extends React.PureComponent<UserInactivityPr
     this.handleInactivity();
   }
 
+  componentWillUnmount() {
+    this.clearTimer();
+  }
+
   /**
    * This method is called whenever a touch is detected. If no touch is
    * detected after `this.props.timeForInactivity` milliseconds, then
    * `this.state.inactive` turns to true.
    */
   handleInactivity = () => {
-    clearTimeout(this.timeout!);
+    this.clearTimer();
     this.setState({
       active: true,
     }, () => {

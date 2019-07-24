@@ -48,6 +48,13 @@ export default class UserInactivity extends React.PureComponent<UserInactivityPr
     this.handleInactivity();
   }
 
+  componentDidUpdate(prevProps: UserInactivityProps) {
+    if (prevProps.timeForInactivity !== this.props.timeForInactivity) {
+        this.clearTimer();
+        this.resetTimeout();
+    }
+  }
+
   componentWillUnmount() {
     this.clearTimer();
   }

@@ -32,6 +32,8 @@
   "devDependencies": {
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.60.2",
+    "@types/react-native-background-timer": "^2.0.0",
+    "react-native-background-timer": "^2.1.1",
     "rimraf": "^2.6.3",
     "tslint": "^5.18.0",
     "tslint-react": "^3.6.0",
@@ -39,6 +41,7 @@
   },
   "peerDependencies": {
     "react": "^16.8.0",
-    "react-native": "^0.60.0"
+    "react-native": "^0.60.0",
+    "react-native-background-timer": "^2.1.1"
   }
 }

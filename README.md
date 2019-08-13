@@ -14,7 +14,7 @@
 
 > React Native component that notifies if the user is active or not (i.e. when the app surface hasn't been touched for more than a certain amount of ms).
 
-**WARNING: migration to version 1.0.0 is due to 13th August 2019**
+**WARNING: migration to version 1.0.0 is due to the 1st September 2019**
 
 As of version 1.0.0, `react-native-user-inactivity` has been rebuilt as a functional component that uses the new React Hook API.
 Thanks to [`usetimeout-react-hook`](https://github.com/jkomyno/usetimeout-react-hook), `react-native-user-inactivity` supports timers different

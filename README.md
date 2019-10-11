@@ -21,7 +21,7 @@ than the standard one (`setTimeout`). This has solved some of the most recurrent
 ## Install
 
 ```sh
-npm install usetimeout-react-hook
+npm install react-native-user-inactivity
 ```
 
 ## 🔑 Key features

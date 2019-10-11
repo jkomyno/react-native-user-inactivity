@@ -1,6 +1,6 @@
 {
   "name": "react-native-user-inactivity",
-  "version": "0.1.3-next",
+  "version": "1.0.0",
   "description": "React Native component that notifies if the user is active or not",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -26,17 +26,26 @@
   ],
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "react": "^16.10.2",
+    "react-native": "^0.61.2",
+    "usetimeout-react-hook": "^0.1.2"
+  },
   "devDependencies": {
-    "@types/react": "^16.8.23",
-    "@types/react-native": "^0.60.2",
+    "@types/react": "^16.9.1",
+    "@types/react-native": "^0.60.19",
+    "@types/react-native-background-timer": "^2.0.0",
+    "react-native-background-timer": "^2.1.1",
     "rimraf": "^2.6.3",
+    "tslib": "^1.10.0",
     "tslint": "^5.18.0",
     "tslint-react": "^3.6.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "ws": ">=3.3.1"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-native": "^0.60.0"
+    "react": "^16.9.1",
+    "react-native": "^0.61.2",
+    "react-native-background-timer": "^2.1.1"
   }
 }

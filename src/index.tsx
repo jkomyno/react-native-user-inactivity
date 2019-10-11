@@ -1,111 +1,177 @@
-import * as React from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
+  // GestureResponderEvent,
   PanResponder,
-  PanResponderInstance,
   StyleProp,
   View,
   ViewStyle,
 } from 'react-native';
+import {
+  defaultTimeoutHandler,
+  TimeoutHandler,
+  useTimeout,
+} from 'usetimeout-react-hook';
 
-export interface UserInactivityProps {
+const defaultTimeForInactivity = 10000;
+const defaultStyle: ViewStyle = {
+  flex: 1,
+};
+
+export interface UserInactivityProps<T = unknown> {
+  /**
+   * Number of milliseconds after which the view is considered inactive.
+   * If it changed, the timer restarts and the view is considered active until
+   * the new timer expires.
+   * It defaults to 1000.
+   */
   timeForInactivity?: number;
+
+  /**
+   * If it's explicitly set to `true` after the component has already been initialized,
+   * the timer restarts and the view is considered active until the new timer expires.
+   * It defaults to true.
+   */
+  isActive?: boolean;
+
+  /**
+   * Generic usetimeout-react-hook's TimeoutHandler implementation.
+   * It defaults to the standard setTimeout/clearTimeout implementation.
+   * See https://github.com/jkomyno/usetimeout-react-hook/#-how-to-use.
+   */
+  timeoutHandler?: TimeoutHandler<T>;
+
+  /**
+   * Children components to embed inside UserInactivity's View.
+   * If any children component is pressed, `onAction` is called after
+   * `timeForInactivity` milliseconds.
+   */
   children: React.ReactNode;
-  style: StyleProp<ViewStyle>;
+
+  /**
+   * Optional custom style for UserInactivity's View.
+   * It defaults to { flex: 1 }.
+   */
+  style?: StyleProp<ViewStyle>;
+
+  /**
+   * Callback triggered anytime UserInactivity's View isn't touched for more than
+   * `timeForInactivity` seconds.
+   * It's `active` argument is true if and only if the View wasn't touched for more
+   * than `timeForInactivity` milliseconds.
+   */
   onAction: (active: boolean) => void;
 }
 
-interface State {
-  active: boolean;
-}
+const UserInactivity: React.FC<UserInactivityProps> = ({
+  children,
+  isActive,
+  onAction,
+  style,
+  timeForInactivity,
+  timeoutHandler,
+}) => {
+  const actualStyle = style || defaultStyle;
 
-export default class UserInactivity extends React.PureComponent<UserInactivityProps, State> {
-  static defaultProps = {
-    style: {
-      flex: 1,
-    },
-    timeForInactivity: 10000,
-  };
+  /**
+   * If the user has provided a custom timeout handler, it is used directly,
+   * otherwise it defaults to the default timeout handler (setTimeout/clearTimeout).
+   */
+  const actualTimeoutHandler = timeoutHandler || defaultTimeoutHandler;
+  const timeout = timeForInactivity || defaultTimeForInactivity;
 
-  state = {
-    active: true,
-  };
-
-  private panResponder!: PanResponderInstance;
-  private timeout: number | undefined;
-
-  private clearTimer = () => {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
+  /**
+   * If the `isActive` prop is manually changed to `true`, call `resetTimerDueToActivity`
+   * to reset the timer and set the current state to active until the timeout expires.
+   * If the `isActive` is changed to `false`, nothing is done.
+   * Note however that toggling `isActive` manually is discouraged for normal use.
+   * It should only be used in those cases where React Native doesnt't seem to
+   * inform the `PanResponder` instance about touch events, such as when tapping
+   * over the keyboard.
+   */
+  const initialActive = isActive === undefined ? true : isActive;
+  const [active, setActive] = useState(initialActive);
+  useEffect(() => {
+    if (isActive) {
+      resetTimerDueToActivity();
     }
-  }
+  }, [isActive]);
 
-  componentWillMount() {
-    this.panResponder = PanResponder.create({
-      onMoveShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
-      onPanResponderTerminationRequest: this.onShouldSetPanResponderCapture,
-      onStartShouldSetPanResponderCapture: this.onShouldSetPanResponderCapture,
-    });
-    this.handleInactivity();
-  }
+  const [date, setDate] = useState(Date.now());
 
-  componentWillUnmount() {
-    this.clearTimer();
-  }
+  /**
+   * The timeout is reset when either `date` or `timeout` change.
+   */
+  const cancelTimer = useTimeout(() => {
+    setActive(false);
+    onAction(false);
+    // @ts-ignore
+  }, timeout, actualTimeoutHandler, [date, timeout]);
+
+  const isFirstRender = useRef(true);
+
+  /**
+   * Triggers `onAction` each time the `active` state turns true
+   * after the initial render.
+   */
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      if (active) {
+        onAction(true);
+      }
+    }
+  }, [active]);
 
   /**
    * This method is called whenever a touch is detected. If no touch is
    * detected after `this.props.timeForInactivity` milliseconds, then
    * `this.state.inactive` turns to true.
    */
-  handleInactivity = () => {
-    this.clearTimer();
-    this.setState({
-      active: true,
-    }, () => {
-      this.props.onAction(this.state.active); // true
-    });
-    this.resetTimeout();
+  function resetTimerDueToActivity() {
+    cancelTimer();
+    setActive(true);
+
+    /**
+     * Causes `useTimeout` to restart.
+     */
+    setDate(Date.now());
   }
 
   /**
-   * If more than `this.props.timeForInactivity` milliseconds have passed
-   * from the latest touch event, then the current state is set to `inactive`
-   * and the `this.props.onInactivity` callback is dispatched.
+   * In order not to steal any touches from the children components, this method
+   * must return false.
    */
-  timeoutHandler = () => {
-    this.setState({
-      active: false,
-    }, () => {
-      this.props.onAction(this.state.active); // false
-    });
-  }
-
-  resetTimeout = () => {
-    this.timeout = setTimeout(this.timeoutHandler, this.props.timeForInactivity);
-  }
-
-  onShouldSetPanResponderCapture = () => {
-    this.handleInactivity();
-    /**
-     * In order not to steal any touches from the children components, this method
-     * must return false.
-     */
+  function resetTimerForPanResponder(/* event: GestureResponderEvent */) {
+    // const { identifier: touchID } = event.nativeEvent;
+    resetTimerDueToActivity();
     return false;
   }
 
-  render() {
-    const {
-      style,
-      children,
-    } = this.props;
-    return (
-      <View
-        style={style}
-        collapsable={false}
-        {...this.panResponder.panHandlers}
-      >
-        {children}
-      </View>
-    );
-  }
-}
+  /**
+   * The PanResponder instance is initialized only once.
+   */
+  const [panResponder, _] = useState(
+    PanResponder.create({
+      onMoveShouldSetPanResponderCapture: resetTimerForPanResponder,
+      onPanResponderTerminationRequest: resetTimerForPanResponder,
+      onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
+    }),
+  );
+
+  return (
+    <View
+      style={actualStyle}
+      collapsable={false}
+      {...panResponder.panHandlers}
+    >
+      {children}
+    </View>
+  );
+};
+
+export default UserInactivity;

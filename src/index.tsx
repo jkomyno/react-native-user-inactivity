@@ -131,8 +131,6 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    * This method is called whenever a touch is detected. If no touch is
    * detected after `this.props.timeForInactivity` milliseconds, then
    * `this.state.inactive` turns to true.
-   * In order not to steal any touches from the children components, this method
-   * must return false.
    */
   function resetTimerDueToActivity() {
     cancelTimer();

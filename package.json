@@ -7,6 +7,7 @@
   "scripts": {
     "clean": "rimraf ./lib",
     "prebuild": "npm run clean && npm run lint",
+    "prepare": "npm-install-peers",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json"
@@ -27,8 +28,6 @@
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "react": "^16.11.0",
-    "react-native": "^0.61.2",
     "usetimeout-react-hook": "^0.1.2"
   },
   "devDependencies": {
@@ -45,7 +44,7 @@
   },
   "peerDependencies": {
     "react": "^16.11.0",
-    "react-native": "^0.61.2",
+    "react-native": "^0.61.3",
     "react-native-background-timer": "^2.1.1"
   }
 }

@@ -27,12 +27,12 @@
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "react": "^16.10.2",
+    "react": "^16.11.0",
     "react-native": "^0.61.2",
     "usetimeout-react-hook": "^0.1.2"
   },
   "devDependencies": {
-    "@types/react": "^16.9.1",
+    "@types/react": "^16.9.11",
     "@types/react-native": "^0.60.19",
     "@types/react-native-background-timer": "^2.0.0",
     "react-native-background-timer": "^2.1.1",

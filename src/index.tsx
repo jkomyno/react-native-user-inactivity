@@ -4,7 +4,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  // GestureResponderEvent,
+  Keyboard,
   PanResponder,
   StyleProp,
   View,
@@ -52,6 +52,12 @@ export interface UserInactivityProps<T = unknown> {
   children: React.ReactNode;
 
   /**
+   * If set to true, the timer is not reset when the keyboard appears
+   * or disappears.
+   */
+  skipKeyboard?: boolean;
+
+  /**
    * Optional custom style for UserInactivity's View.
    * It defaults to { flex: 1 }.
    */
@@ -70,6 +76,7 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   children,
   isActive,
   onAction,
+  skipKeyboard,
   style,
   timeForInactivity,
   timeoutHandler,
@@ -126,6 +133,25 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
       }
     }
   }, [active]);
+
+  /**
+   * Resets the timer every time the keyboard appears or disappears,
+   * unless skipKeyboard is true.
+   */
+  useEffect(() => {
+    if (!skipKeyboard) {
+      Keyboard.addListener('keyboardDidHide', resetTimerDueToActivity);
+      Keyboard.addListener('keyboardDidShow', resetTimerDueToActivity);
+    }
+
+    // release event listeners on destruction
+    return () => {
+      if (!skipKeyboard) {
+        Keyboard.removeAllListeners('keyboardDidHide');
+        Keyboard.removeAllListeners('keyboardDidShow');
+      }
+    };
+  }, []);
 
   /**
    * This method is called whenever a touch is detected. If no touch is

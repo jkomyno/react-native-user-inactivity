@@ -1,6 +1,6 @@
 <h1 align="center">react-native-user-inactivity</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.1-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/jkomyno/react-native-user-inactivity#readme">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
@@ -13,6 +13,9 @@
 </p>
 
 > React Native component that notifies if the user is active or not (i.e. when the app surface hasn't been touched for more than a certain amount of ms).
+
+As of version 1.1.0, `react-native-user-inactivity` resets the timer also when the keyboard appears or disappears.
+If you want to avoid this behaviour, you can set the `skipKeyboard` property to `true`.
 
 As of version 1.0.0, `react-native-user-inactivity` has been rebuilt as a functional component that uses the new React Hook API.
 Thanks to [`usetimeout-react-hook`](https://github.com/jkomyno/usetimeout-react-hook), `react-native-user-inactivity` supports timers different
@@ -67,6 +70,12 @@ interface UserInactivityProps<T = unknown> {
    * `timeForInactivity` milliseconds.
    */
   children: React.ReactNode;
+
+  /**
+   * If set to true, the timer is not reset when the keyboard appears
+   * or disappears.
+   */
+  skipKeyboard?: boolean;
 
   /**
    * Optional custom style for UserInactivity's View.

@@ -2,8 +2,8 @@
   "name": "react-native-user-inactivity",
   "version": "1.1.0",
   "description": "React Native component that notifies if the user is active or not",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "clean": "rimraf ./lib",
     "prebuild": "npm run clean && npm run lint",
@@ -11,11 +11,6 @@
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json"
   },
-  "files": [
-    "lib",
-    "LICENSE",
-    "README.md"
-  ],
   "keywords": [
     "react",
     "react-native",

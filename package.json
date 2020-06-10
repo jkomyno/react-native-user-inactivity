@@ -29,10 +29,6 @@
   "dependencies": {
     "usetimeout-react-hook": "^0.1.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mdaronco/react-native-user-inactivity"
-  },
   "devDependencies": {
     "@types/react": "^16.9.11",
     "@types/react-native": "^0.60.19",

@@ -1,4 +1,5 @@
 import React, {
+  memo,
   useEffect,
   useRef,
   useState,
@@ -38,6 +39,13 @@ export interface UserInactivityProps<T = unknown> {
   isActive?: boolean;
 
   /**
+   * Prevents the PanResponder instance from being created so that user
+   * gestures are ignored and do not reset the timer.
+   * It defaults to false;
+   */
+  ignoreGestures?: boolean;
+
+  /**
    * Generic usetimeout-react-hook's TimeoutHandler implementation.
    * It defaults to the standard setTimeout/clearTimeout implementation.
    * See https://github.com/jkomyno/usetimeout-react-hook/#-how-to-use.
@@ -75,6 +83,7 @@ export interface UserInactivityProps<T = unknown> {
 const UserInactivity: React.FC<UserInactivityProps> = ({
   children,
   isActive,
+  ignoreGestures = false,
   onAction,
   skipKeyboard,
   style,
@@ -179,15 +188,22 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   }
 
   /**
-   * The PanResponder instance is initialized only once.
+   * The PanResponder instance.
    */
-  const [panResponder, _] = useState(
-    PanResponder.create({
+  const [panResponder, setPanResponder] = useState(
+    ignoreGestures ? { panHandlers: {} } : PanResponder.create({
       onMoveShouldSetPanResponderCapture: resetTimerForPanResponder,
       onPanResponderTerminationRequest: resetTimerForPanResponder,
       onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
     }),
   );
+  useEffect(() => {
+    setPanResponder(ignoreGestures ? { panHandlers: {} } : PanResponder.create({
+      onMoveShouldSetPanResponderCapture: resetTimerForPanResponder,
+      onPanResponderTerminationRequest: resetTimerForPanResponder,
+      onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
+    }));
+  }, [ignoreGestures]);
 
   return (
     <View
@@ -200,4 +216,4 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   );
 };
 
-export default UserInactivity;
+export default memo(UserInactivity);

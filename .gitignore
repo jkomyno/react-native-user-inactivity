@@ -57,6 +57,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# compiled files
-lib/

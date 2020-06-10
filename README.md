@@ -60,7 +60,7 @@ interface UserInactivityProps<T = unknown> {
   /**
    * Prevents the PanResponder instance from being created so that user
    * gestures are ignored and do not reset the timer.
-   * It defaults to false;
+   * It defaults to false.
    */
   ignoreGestures?: boolean;
 

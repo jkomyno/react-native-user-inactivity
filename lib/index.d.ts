@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { TimeoutHandler } from 'usetimeout-react-hook';
-export interface UserInactivityProps<T = unknown> {
+export interface UserInactivityProps<T = unknown> extends ViewProps {
     /**
      * Number of milliseconds after which the view is considered inactive.
      * If it changed, the timer restarts and the view is considered active until

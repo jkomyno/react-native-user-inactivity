@@ -1,17 +1,17 @@
 import React, {
+  FC,
   memo,
   useEffect,
   useRef,
   useState,
-  FC,
 } from 'react';
 import {
   Keyboard,
   PanResponder,
   StyleProp,
   View,
-  ViewStyle,
   ViewProps,
+  ViewStyle,
 } from 'react-native';
 import {
   defaultTimeoutHandler,
@@ -207,7 +207,7 @@ const UserInactivity: FC<UserInactivityProps> = ({
         onPanResponderTerminationRequest: resetTimerForPanResponder,
         onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
       }));
-    } 
+    }
   }, [ignoreGestures]);
 
   return (

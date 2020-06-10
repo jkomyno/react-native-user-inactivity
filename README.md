@@ -58,6 +58,13 @@ interface UserInactivityProps<T = unknown> {
   isActive?: boolean;
 
   /**
+   * Prevents the PanResponder instance from being created so that user
+   * gestures are ignored and do not reset the timer.
+   * It defaults to false;
+   */
+  ignoreGestures?: boolean;
+
+  /**
    * Generic usetimeout-react-hook's TimeoutHandler implementation.
    * It defaults to the standard setTimeout/clearTimeout implementation.
    * See https://github.com/jkomyno/usetimeout-react-hook/#-how-to-use.

@@ -41,9 +41,10 @@ export interface UserInactivityProps<T = unknown> extends ViewProps {
   isActive?: boolean;
 
   /**
-   * Prevents the PanResponder instance from being created so that user
-   * gestures are ignored and do not reset the timer.
-   * It defaults to false;
+   * Prevents the PanResponder instance from being created so that UI
+   * gestures are ignored and don't cause the timer to be reset.
+   * This is useful in scenarios where fixed session durations are desired.
+   * It defaults to false.
    */
   ignoreGestures?: boolean;
 

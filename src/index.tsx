@@ -1,4 +1,6 @@
 import React, {
+  FC,
+  memo,
   useEffect,
   useRef,
   useState,
@@ -8,6 +10,7 @@ import {
   PanResponder,
   StyleProp,
   View,
+  ViewProps,
   ViewStyle,
 } from 'react-native';
 import {
@@ -21,7 +24,7 @@ const defaultStyle: ViewStyle = {
   flex: 1,
 };
 
-export interface UserInactivityProps<T = unknown> {
+export interface UserInactivityProps<T = unknown> extends ViewProps {
   /**
    * Number of milliseconds after which the view is considered inactive.
    * If it changed, the timer restarts and the view is considered active until
@@ -36,6 +39,13 @@ export interface UserInactivityProps<T = unknown> {
    * It defaults to true.
    */
   isActive?: boolean;
+
+  /**
+   * Prevents the PanResponder instance from being created so that user
+   * gestures are ignored and do not reset the timer.
+   * It defaults to false;
+   */
+  ignoreGestures?: boolean;
 
   /**
    * Generic usetimeout-react-hook's TimeoutHandler implementation.
@@ -72,14 +82,16 @@ export interface UserInactivityProps<T = unknown> {
   onAction: (active: boolean) => void;
 }
 
-const UserInactivity: React.FC<UserInactivityProps> = ({
+const UserInactivity: FC<UserInactivityProps> = ({
   children,
   isActive,
+  ignoreGestures = false,
   onAction,
   skipKeyboard,
   style,
   timeForInactivity,
   timeoutHandler,
+  ...rest
 }) => {
   const actualStyle = style || defaultStyle;
 
@@ -179,20 +191,30 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   }
 
   /**
-   * The PanResponder instance is initialized only once.
+   * The PanResponder instance.
    */
-  const [panResponder, _] = useState(
-    PanResponder.create({
+  const [panResponder, setPanResponder] = useState(
+    ignoreGestures ? { panHandlers: {} } : PanResponder.create({
       onMoveShouldSetPanResponderCapture: resetTimerForPanResponder,
       onPanResponderTerminationRequest: resetTimerForPanResponder,
       onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
     }),
   );
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      setPanResponder(ignoreGestures ? { panHandlers: {} } : PanResponder.create({
+        onMoveShouldSetPanResponderCapture: resetTimerForPanResponder,
+        onPanResponderTerminationRequest: resetTimerForPanResponder,
+        onStartShouldSetPanResponderCapture: resetTimerForPanResponder,
+      }));
+    }
+  }, [ignoreGestures]);
 
   return (
     <View
       style={actualStyle}
       collapsable={false}
+      {...rest}
       {...panResponder.panHandlers}
     >
       {children}
@@ -200,4 +222,4 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   );
 };
 
-export default UserInactivity;
+export default memo(UserInactivity);

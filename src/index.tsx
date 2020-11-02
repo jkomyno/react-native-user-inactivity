@@ -139,16 +139,16 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    * unless skipKeyboard is true.
    */
   useEffect(() => {
+    let hideEvent, showEvent;
     if (!skipKeyboard) {
-      Keyboard.addListener('keyboardDidHide', resetTimerDueToActivity);
-      Keyboard.addListener('keyboardDidShow', resetTimerDueToActivity);
+      hideEvent = Keyboard.addListener('keyboardDidHide', resetTimerDueToActivity);
+      showEvent = Keyboard.addListener('keyboardDidShow', resetTimerDueToActivity);
     }
-
     // release event listeners on destruction
     return () => {
       if (!skipKeyboard) {
-        Keyboard.removeAllListeners('keyboardDidHide');
-        Keyboard.removeAllListeners('keyboardDidShow');
+        Keyboard.removeListener(hideEvent);
+        Keyboard.removeListener(showEvent);
       }
     };
   }, []);

@@ -52,6 +52,12 @@ export interface UserInactivityProps<T = unknown> {
   children: React.ReactNode;
 
   /**
+   * When set to false, cancels running timers
+   * When set to true, resets timer
+   */
+  isEnabled?: boolean;
+
+  /**
    * If set to true, the timer is not reset when the keyboard appears
    * or disappears.
    */
@@ -77,6 +83,7 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   isActive,
   onAction,
   skipKeyboard,
+  isEnabled,
   style,
   timeForInactivity,
   timeoutHandler,
@@ -107,6 +114,20 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
     }
   }, [isActive]);
 
+  /**
+   * Handle enabled on or off
+  */
+  const initialEnabled = isEnabled === undefined ? true : isEnabled;
+  const [enabled, setEnabled] = useState(initialActive);
+  useEffect(() => {
+      setEnabled(isEnabled);
+      if (isEnabled) {
+          setTimer();
+      } else {
+          cancelTimer();
+      }
+  }, [isEnabled]);
+
   const [date, setDate] = useState(Date.now());
 
   /**
@@ -127,6 +148,9 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      if (!initialEnabled) {
+        cancelTimer();
+    }
     } else {
       if (active) {
         onAction(true);
@@ -159,12 +183,19 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    * `this.state.inactive` turns to true.
    */
   function resetTimerDueToActivity() {
+    if (!enabled) {
+        return;
+    }
     cancelTimer();
-    setActive(true);
 
-    /**
-     * Causes `useTimeout` to restart.
-     */
+    setTimer();
+  }
+  
+  /**
+   * Causes `useTimeout` to restart.
+   */
+  function setTimer() {
+    setActive(true);
     setDate(Date.now());
   }
 

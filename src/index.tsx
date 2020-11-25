@@ -115,12 +115,13 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   }, [isActive]);
 
   /**
-   * Handle enabled on or off
-  */
+   * When ths isEnabled prop is changed to true, set the timer.
+   * When the pro is set to false, cancel the timer.
+   */
   const initialEnabled = isEnabled === undefined ? true : isEnabled;
-  const [enabled, setEnabled] = useState(initialActive);
+  const enabled = useRef(initialEnabled);
   useEffect(() => {
-      setEnabled(isEnabled);
+      enabled.current = isEnabled === undefined ? true : isEnabled;
       if (isEnabled) {
           setTimer();
       } else {
@@ -148,9 +149,10 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      // on the first render, cancel the initial timer if the component's isEnabled is false
       if (!initialEnabled) {
         cancelTimer();
-    }
+      }
     } else {
       if (active) {
         onAction(true);
@@ -181,16 +183,17 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    * This method is called whenever a touch is detected. If no touch is
    * detected after `this.props.timeForInactivity` milliseconds, then
    * `this.state.inactive` turns to true.
+   * isEnabled set to false will supress resetting the timer
    */
   function resetTimerDueToActivity() {
-    if (!enabled) {
+    if (!enabled.current) {
         return;
     }
     cancelTimer();
 
     setTimer();
   }
-  
+
   /**
    * Causes `useTimeout` to restart.
    */

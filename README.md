@@ -90,6 +90,15 @@ interface UserInactivityProps<T = unknown> {
    * than `timeForInactivity` milliseconds.
    */
   onAction: (active: boolean) => void;
+
+  /**
+   * Disable this component so that it stops sending notifications. Changing this value
+   * does not change the current isActive status. Changing it to true (disabled) will
+   * simply make it so that we don't send any notifications anymore.
+   *
+   * @default false
+   */
+  disabled?: boolean;
 }
 ```
 
@@ -165,6 +174,28 @@ export default () => {
     </View>
   );
 }
+
+## react-navigation
+
+The following code can be used to disable the UserInactivity when
+the user changes navigation route (when the view becomes un-focused).
+
+```
+import {useIsFocused} from '@react-navigation/native';
+
+...
+
+  const isFocused = useIsFocused();
+
+  return (
+...
+      <UserInactivity
+        isActive={active}
+        timeForInactivity={timer}
+        onAction={isActive => { setActive(isActive); }}
+        style={{ flex: 1, paddingTop: '10%' }}
+        disabled={!isFocused}
+      >
 ```
 
 Also, please checkout the [example on Snack/Expo](https://snack.expo.io/B1sjE9uMH).

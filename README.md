@@ -121,6 +121,8 @@ export default () => {
 }
 ```
 
+**Warning**: it seems that `react-native-background-timer` doesn't work properly with Android 10+ ([#41](https://github.com/jkomyno/react-native-user-inactivity/issues/41)). I'm currently unable to reproduce the problem, but help from the open-source community on this matter is certainly appreciated.
+
 ## ✨ Typings
 
 Since the component itself is written in TypeScript, your editor's intellisense system should automagically detect

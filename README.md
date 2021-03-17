@@ -26,6 +26,10 @@ than the standard one (`setTimeout`). This has solved some of the most recurrent
 ```sh
 npm install react-native-user-inactivity
 ```
+If you are running a version of react < 17 you'll need to include the `--legacy-peer-deps` flag.
+```sh
+npm install react-native-user-inactivity --legacy-peer-deps
+```
 
 ## 🔑 Key features
 

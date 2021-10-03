@@ -12,14 +12,14 @@
   </a>
 </p>
 
-> React Native component that notifies if the user is active or not (i.e. when the app surface hasn't been touched for more than a certain amount of ms).
+> Functional React Native component that notifies when the user stops interacting with the mobile screen for a given amount of time.
 
 As of version 1.1.0, `react-native-user-inactivity` resets the timer also when the keyboard appears or disappears.
 If you want to avoid this behaviour, you can set the `skipKeyboard` property to `true`.
 
 As of version 1.0.0, `react-native-user-inactivity` has been rebuilt as a functional component that uses the new React Hook API.
 Thanks to [`usetimeout-react-hook`](https://github.com/jkomyno/usetimeout-react-hook), `react-native-user-inactivity` supports timers different
-than the standard one (`setTimeout`). This has solved some of the most recurrent issues, such as #12, #16, #17.
+than the standard one (`setTimeout`). This has solved some of the most recurrent issues, such as [#12](https://github.com/jkomyno/react-native-user-inactivity/issues/12), [#16](https://github.com/jkomyno/react-native-user-inactivity/issues/16), [#17](https://github.com/jkomyno/react-native-user-inactivity/issues/17).
 
 ## Install
 
@@ -198,9 +198,15 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 The code is short, throughly commented and well tested, so you should feel quite comfortable working on it.
 If you have any doubt or suggestion, please open an issue.
 
+## ⚠️ Issues
+
+Chances are the problem you have bumped into have already been discussed and solved in the past.
+Please take a look at the issues (both the closed ones and the comments to the open ones) before opening a new issue.
+Unfortunately, at the moment I'm not able to offer fast support, because I am a student worker and React Native is no longer part of my main tech stack.
+
 ## 🦄 Show your support
 
-Give a ⭐️ if this project helped or inspired you!
+Give a ⭐️ if this project helped or inspired you! In the future, I might consider offering premium support to Github Sponsors.
 
 ## 📝 License
 

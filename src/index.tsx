@@ -70,6 +70,15 @@ export interface UserInactivityProps<T = unknown> {
    * than `timeForInactivity` milliseconds.
    */
   onAction: (active: boolean) => void;
+
+  /**
+   * Disable this component so that it stops sending notifications. Changing this value
+   * does not change the current isActive status. Changing it to true (disabled) will
+   * simply make it so that we don't send any notifications anymore.
+   *
+   * @default false
+   */
+  disabled?: boolean;
 }
 
 const UserInactivity: React.FC<UserInactivityProps> = ({
@@ -80,6 +89,7 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   style,
   timeForInactivity,
   timeoutHandler,
+  disabled = false,
 }) => {
   const actualStyle = style || defaultStyle;
 
@@ -102,21 +112,26 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   const initialActive = isActive === undefined ? true : isActive;
   const [active, setActive] = useState(initialActive);
   useEffect(() => {
-    if (isActive) {
+    if (isActive || disabled) {
       resetTimerDueToActivity();
     }
-  }, [isActive]);
+  }, [isActive, disabled]);
 
   const [date, setDate] = useState(Date.now());
 
   /**
    * The timeout is reset when either `date` or `timeout` change.
    */
-  const cancelTimer = useTimeout(() => {
-    setActive(false);
-    onAction(false);
+  const cancelTimer = useTimeout(
+    () => {
+      setActive(false);
+      onAction(false);
+    },
+    timeout,
     // @ts-ignore
-  }, timeout, actualTimeoutHandler, [date, timeout]);
+    actualTimeoutHandler,
+    [date, timeout],
+  );
 
   const isFirstRender = useRef(true);
 
@@ -160,12 +175,15 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    */
   function resetTimerDueToActivity() {
     cancelTimer();
-    setActive(true);
 
-    /**
-     * Causes `useTimeout` to restart.
-     */
-    setDate(Date.now());
+    if (!disabled) {
+      setActive(true);
+
+      /**
+       * Causes `useTimeout` to restart.
+       */
+      setDate(Date.now());
+    }
   }
 
   /**

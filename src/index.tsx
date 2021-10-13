@@ -52,6 +52,12 @@ export interface UserInactivityProps<T = unknown> {
   children: React.ReactNode;
 
   /**
+   * When set to false, cancels running timers
+   * When set to true, resets timer
+   */
+  isEnabled?: boolean;
+
+  /**
    * If set to true, the timer is not reset when the keyboard appears
    * or disappears.
    */
@@ -77,6 +83,7 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   isActive,
   onAction,
   skipKeyboard,
+  isEnabled,
   style,
   timeForInactivity,
   timeoutHandler,
@@ -107,6 +114,21 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
     }
   }, [isActive]);
 
+  /**
+   * When ths isEnabled prop is changed to true, set the timer.
+   * When the pro is set to false, cancel the timer.
+   */
+  const initialEnabled = isEnabled === undefined ? true : isEnabled;
+  const enabled = useRef(initialEnabled);
+  useEffect(() => {
+      enabled.current = isEnabled === undefined ? true : isEnabled;
+      if (isEnabled) {
+          setTimer();
+      } else {
+          cancelTimer();
+      }
+  }, [isEnabled]);
+
   const [date, setDate] = useState(Date.now());
 
   /**
@@ -127,6 +149,10 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      // on the first render, cancel the initial timer if the component's isEnabled is false
+      if (!initialEnabled) {
+        cancelTimer();
+      }
     } else {
       if (active) {
         onAction(true);
@@ -157,14 +183,22 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    * This method is called whenever a touch is detected. If no touch is
    * detected after `this.props.timeForInactivity` milliseconds, then
    * `this.state.inactive` turns to true.
+   * isEnabled set to false will supress resetting the timer
    */
   function resetTimerDueToActivity() {
+    if (!enabled.current) {
+        return;
+    }
     cancelTimer();
-    setActive(true);
 
-    /**
-     * Causes `useTimeout` to restart.
-     */
+    setTimer();
+  }
+
+  /**
+   * Causes `useTimeout` to restart.
+   */
+  function setTimer() {
+    setActive(true);
     setDate(Date.now());
   }
 

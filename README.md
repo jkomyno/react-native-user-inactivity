@@ -62,6 +62,14 @@ interface UserInactivityProps<T = unknown> {
   isActive?: boolean;
 
   /**
+   * Prevents the PanResponder instance from being created so that UI
+   * gestures are ignored and don't cause the timer to be reset.
+   * This is useful in scenarios where fixed session durations are desired.
+   * It defaults to false.
+   */
+  ignoreGestures?: boolean;
+
+  /**
    * Generic usetimeout-react-hook's TimeoutHandler implementation.
    * It defaults to the standard setTimeout/clearTimeout implementation.
    * See https://github.com/jkomyno/usetimeout-react-hook/#-how-to-use.
@@ -137,17 +145,21 @@ In fact, autocomplete capabilities and warning should come for free as you're ty
 
 ```tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, Button, Switch } from 'react-native';
 import UserInactivity from 'react-native-user-inactivity';
 
 export default () => {
   const [active, setActive] = useState(true);
+  const [ignoreGestures, setIgnoreGestures] = useState(false);
   const [timer, setTimer] = useState(2000);
+
+  const toggleSwitch = () => setIgnoreGestures((previousState) => !previousState);
 
   return (
     <View style={{ flex: 1 }}>
       <UserInactivity
         isActive={active}
+        ignoreGestures={ignoreGestures}
         timeForInactivity={timer}
         onAction={isActive => { setActive(isActive); }}
         style={{ flex: 1, paddingTop: '10%' }}
@@ -162,6 +174,13 @@ export default () => {
           textContentType="creditCardNumber"
           value={timer.toString(10)}
           onChangeText={text => setTimer(Number.parseInt(text || 0, 10))}
+        />
+        <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={ignoreGestures ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={ignoreGestures}
         />
       </UserInactivity>
       <View style={{ flex: 3, backgroundColor: '#fcfcaa', }}>

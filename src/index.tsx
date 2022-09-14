@@ -134,6 +134,10 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
     }
   }, [active]);
 
+ function removeTimer() {
+    cancelTimer();
+  }
+
   /**
    * Resets the timer every time the keyboard appears or disappears,
    * unless skipKeyboard is true.
@@ -143,8 +147,8 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
       return;
     }
 
-    const hideEvent = Keyboard.addListener('keyboardDidHide', resetTimerDueToActivity);
-    const showEvent = Keyboard.addListener('keyboardDidShow', resetTimerDueToActivity);
+    const hideEvent = Keyboard.addListener('keyboardDidHide',resetTimerDueToActivity );
+    const showEvent = Keyboard.addListener('keyboardDidShow', removeTimer);
 
     // release event listeners on destruction
     return () => {

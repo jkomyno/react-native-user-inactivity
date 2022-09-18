@@ -94,6 +94,8 @@ interface UserInactivityProps<T = unknown> {
    * than `timeForInactivity` milliseconds.
    */
   onAction: (active: boolean) => void;
+   // freeze the timer for particular event
+  freezeTimer?: boolean
 }
 ```
 

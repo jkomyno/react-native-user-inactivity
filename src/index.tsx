@@ -70,6 +70,8 @@ export interface UserInactivityProps<T = unknown> {
    * than `timeForInactivity` milliseconds.
    */
   onAction: (active: boolean) => void;
+  // freeze the timer for particular event
+  freezeTimer?: boolean
 }
 
 const UserInactivity: React.FC<UserInactivityProps> = ({
@@ -80,6 +82,7 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   style,
   timeForInactivity,
   timeoutHandler,
+  freezeTimer = false
 }) => {
   const actualStyle = style || defaultStyle;
 
@@ -102,10 +105,18 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
   const initialActive = isActive === undefined ? true : isActive;
   const [active, setActive] = useState(initialActive);
   useEffect(() => {
-    if (isActive) {
+    if (isActive && !freezeTimer) {
       resetTimerDueToActivity();
     }
   }, [isActive]);
+
+  useEffect(()=>{
+    if(freezeTimer) {
+        cancelTimer()
+    } else {
+        resetTimerDueToActivity()
+    }
+  },[freezeTimer])
 
   const [date, setDate] = useState(Date.now());
 
@@ -174,7 +185,9 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
    */
   function resetTimerForPanResponder(/* event: GestureResponderEvent */) {
     // const { identifier: touchID } = event.nativeEvent;
-    resetTimerDueToActivity();
+    if(!freezeTimer) {
+      resetTimerDueToActivity();
+    }
     return false;
   }
 

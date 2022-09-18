@@ -154,7 +154,7 @@ const UserInactivity: React.FC<UserInactivityProps> = ({
       return;
     }
 
-    const hideEvent = Keyboard.addListener('keyboardDidHide',resetTimerDueToActivity);
+    const hideEvent = Keyboard.addListener('keyboardDidHide', resetTimerDueToActivity);
     const showEvent = Keyboard.addListener('keyboardDidShow', resetTimerDueToActivity);
 
     // release event listeners on destruction

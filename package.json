@@ -27,7 +27,7 @@
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "usetimeout-react-hook": "lapwil/usetimeout-react-hook"
+    "usetimeout-react-hook": "^0.1.2"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",

@@ -27,7 +27,7 @@
   "author": "Alberto Schiabel (https://github.com/jkomyno)",
   "license": "MIT",
   "dependencies": {
-    "usetimeout-react-hook": "^0.1.2"
+    "usetimeout-react-hook": "lapwil/usetimeout-react-hook"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
@@ -42,8 +42,8 @@
     "ws": ">=3.3.1"
   },
   "peerDependencies": {
-    "react": "^17.0.0",
-    "react-native": "^0.63.0",
+    "react": ">=17.0.0",
+    "react-native": ">=0.63.0",
     "react-native-background-timer": "^2.4.1"
   }
 }
